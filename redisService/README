@@ -1,0 +1,2 @@
+In this microservice application redis has been installed via doceker image 
+We are using docker to avoid version issue throught the other applications 
