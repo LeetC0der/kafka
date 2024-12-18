@@ -7,11 +7,23 @@ services:
       - "3000:3000"
     environment:
       - MONGO_URI=mongodb://mongo:27017/authdb
-      - REDIS_HOST=redis
+      - REDIS_HOST=redis-stack
       - REDIS_PORT=6379
     depends_on:
       - mongo
-      - redis
+      - redis-stack
+
+  redisservice:
+    build: ./redisService
+    ports: 
+      - "8002:8002"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/authdb
+      - REDIS_HOST=redis-stack
+      - REDIS_PORT=6379
+    depends_on:
+      - mongo
+      - redis-stack
 
   mongo:
     image: mongo:6.0
@@ -21,13 +33,13 @@ services:
     volumes:
       - mongo-data:/data/db
 
-  redis:
+  redis-stack:
     image: redis/redis-stack:latest
     container_name: redis-stack
     ports:
       - "6379:6379"
       - "8001:8001"
-    command: ["redis-stack-server"]
+    restart: always
 
 volumes:
   mongo-data:

@@ -1,2 +1,57 @@
-In this microservice application redis has been installed via doceker image 
-We are using docker to avoid version issue throught the other applications 
+# Redis Setup and Access in a Dockerized Microservices Application  
+We use Docker to ensure consistent Redis versions across all applications in our microservices architecture. This guide outlines how to interact with the Redis service via Docker.  
+
+## Accessing Redis Inside Docker  
+
+### Steps to Connect to Redis  
+
+1. **Start the Docker Compose File**  
+   - Ensure the Docker Compose file is up and running using the following command:  
+     ```bash  
+     docker-compose up  
+     ```  
+
+2. **Open a New Command Prompt or Terminal**  
+   - Once the Docker containers are running, open a new command prompt or terminal to interact with the Redis container.
+
+3. **Enter the Redis Container**  
+   - Identify the Redis container's `container_id` by running:  
+     ```bash  
+     docker ps  
+     ```  
+   - Use the following command to access the container's bash shell:  
+     ```bash  
+     docker exec -it <container_id> bash  
+     ```  
+     Replace `<container_id>` with the actual ID of the Redis container.
+
+4. **Access the Redis CLI**  
+   - Once inside the container (you will see a prompt like `random_no/#`), enter the Redis CLI by typing:  
+     ```bash  
+     redis-cli  
+     ```  
+
+5. **Verify Redis Connection**  
+   - You should now be inside the Redis CLI, indicated by a prompt like:  
+     ```  
+     127.0.0.1:6379>  
+     ```  
+   - Test the connection by running a simple command, such as:  
+     ```  
+     PING  
+     ```  
+     The response `PONG` indicates a successful connection.  
+
+
+<!-- Redis commands -->
+
+List: 
+  - LPUSH to add item on left side of the list
+  - RPUSH to add item on right side of the list
+  - LPOP  to pop left/first item from list
+  - RPOP  to pop right/last item from list
+  - LLEN  to find the length of list
+  - BLPOP to pop and item from the list after specified time , -> command BLPOP listname 
+
+  - using this set of commands we can use the list as both queue and stack
+
