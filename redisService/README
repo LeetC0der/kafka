@@ -1,57 +1,100 @@
 # Redis Setup and Access in a Dockerized Microservices Application  
+
 We use Docker to ensure consistent Redis versions across all applications in our microservices architecture. This guide outlines how to interact with the Redis service via Docker.  
 
 ## Accessing Redis Inside Docker  
-
 ### Steps to Connect to Redis  
-
 1. **Start the Docker Compose File**  
    - Ensure the Docker Compose file is up and running using the following command:  
-     ```bash  
+     bash  
      docker-compose up  
-     ```  
-
 2. **Open a New Command Prompt or Terminal**  
    - Once the Docker containers are running, open a new command prompt or terminal to interact with the Redis container.
-
 3. **Enter the Redis Container**  
    - Identify the Redis container's `container_id` by running:  
-     ```bash  
+     bash  
      docker ps  
-     ```  
    - Use the following command to access the container's bash shell:  
-     ```bash  
+     bash  
      docker exec -it <container_id> bash  
-     ```  
      Replace `<container_id>` with the actual ID of the Redis container.
-
 4. **Access the Redis CLI**  
    - Once inside the container (you will see a prompt like `random_no/#`), enter the Redis CLI by typing:  
-     ```bash  
+     bash  
      redis-cli  
-     ```  
-
+   
 5. **Verify Redis Connection**  
    - You should now be inside the Redis CLI, indicated by a prompt like:  
-     ```  
      127.0.0.1:6379>  
-     ```  
    - Test the connection by running a simple command, such as:  
-     ```  
      PING  
-     ```  
      The response `PONG` indicates a successful connection.  
 
+## Redis Data Structures and Commands  
+### STRING  
+- **SET**: Set the value of a key.   
+  SET key value   
+- **GET**: Retrieve the value of a key.   
+  GET key   
 
-<!-- Redis commands -->
+### LIST  
+- **LPUSH**: Add an item to the left side of the list.   
+  LPUSH list_name value   
+- **RPUSH**: Add an item to the right side of the list.   
+  RPUSH list_name value   
+- **LPOP**: Remove and return the first item of the list.   
+  LPOP list_name   
+- **RPOP**: Remove and return the last item of the list.   
+  RPOP list_name   
+- **LLEN**: Get the length of the list.   
+  LLEN list_name   
+- **BLPOP**: Block until an item is available in the list or a timeout occurs.   
+  BLPOP list_name timeout   
 
-List: 
-  - LPUSH to add item on left side of the list
-  - RPUSH to add item on right side of the list
-  - LPOP  to pop left/first item from list
-  - RPOP  to pop right/last item from list
-  - LLEN  to find the length of list
-  - BLPOP to pop and item from the list after specified time , -> command BLPOP listname 
+Lists can act as both queues and stacks using these commands.
 
-  - using this set of commands we can use the list as both queue and stack
+### HASHES  
+Hashes are useful for storing objects with fields and values.
 
+- **HSET**: Set a field in the hash.   
+  HSET hash_name field value   
+- **HGET**: Get the value of a field in the hash.   
+  HGET hash_name field   
+- **HGETALL**: Retrieve all fields and values in the hash.   
+  HGETALL hash_name   
+- **HDEL**: Delete one or more fields from the hash.   
+  HDEL hash_name field1 [field2 ...]   
+- **HEXISTS**: Check if a field exists in the hash.   
+  HEXISTS hash_name field   
+- **HLEN**: Get the number of fields in the hash.   
+  HLEN hash_name   
+- **HMSET**: Set multiple fields in the hash (deprecated, use HSET).   
+  HMSET hash_name field1 value1 field2 value2   
+- **HMGET**: Retrieve multiple fields from the hash.   
+  HMGET hash_name field1 field2   
+
+### SORTED SETS  
+Sorted sets maintain order based on a score associated with each member.
+
+- **ZADD**: Add a member with a score to the sorted set.   
+  ZADD sorted_set_name score member   
+- **ZRANGE**: Get members in a range (default is ascending order).   
+  ZRANGE sorted_set_name start end   
+- **ZREVRANGE**: Get members in a range in descending order.   
+  ZREVRANGE sorted_set_name start end   
+- **ZSCORE**: Get the score of a member.   
+  ZSCORE sorted_set_name member   
+- **ZRANK**: Get the rank of a member (0-based index, ascending order).   
+  ZRANK sorted_set_name member   
+- **ZREVRANK**: Get the rank of a member (0-based index, descending order).   
+  ZREVRANK sorted_set_name member   
+- **ZREM**: Remove one or more members from the sorted set.   
+  ZREM sorted_set_name member1 [member2 ...]   
+- **ZCARD**: Get the number of members in the sorted set.   
+  ZCARD sorted_set_name   
+- **ZCOUNT**: Count members with scores within a range.   
+  ZCOUNT sorted_set_name min max   
+- **ZRANGEBYSCORE**: Get members within a specific score range (ascending).   
+  ZRANGEBYSCORE sorted_set_name min max   
+- **ZREVRANGEBYSCORE**: Get members within a specific score range (descending).   
+  ZREVRANGEBYSCORE sorted_set_name max min   
